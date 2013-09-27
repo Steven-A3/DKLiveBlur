@@ -151,7 +151,6 @@
         });
     });
     
-    dispatch_release(queue);
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
