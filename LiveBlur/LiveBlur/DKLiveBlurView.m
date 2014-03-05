@@ -73,6 +73,8 @@
 
 - (UIImage *)applyBlurOnImage: (UIImage *)imageToBlur
                    withRadius:(CGFloat)blurRadius {
+	if (!imageToBlur) return nil;
+
     if ((blurRadius < 0.0f) || (blurRadius > 1.0f)) {
         blurRadius = 0.5f;
     }
@@ -136,19 +138,25 @@
     _originalImage = originalImage;
     
     self.image = originalImage;
-    
+
+	if (!_originalImage) return;
+
     dispatch_queue_t queue = dispatch_queue_create("Blur queue", NULL);
     
-    dispatch_async(queue, ^ {
-        
-        UIImage *blurredImage = [self applyBlurOnImage: self.originalImage withRadius: self.initialBlurLevel];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            self.backgroundImageView.alpha = 0.0;
-            self.backgroundImageView.image = blurredImage;
-        });
-    });
+    dispatch_async(queue, ^{
+
+		UIImage *blurredImage = [self applyBlurOnImage:self.originalImage withRadius:self.initialBlurLevel];
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+
+			CGFloat blurLevel = 0.0;
+			if (self.scrollView) {
+				blurLevel = (self.scrollView.contentOffset.y + self.scrollView.contentInset.top) / (2 * CGRectGetHeight(self.bounds) / 3);
+			}
+			self.backgroundImageView.alpha = blurLevel;
+			self.backgroundImageView.image = blurredImage;
+		});
+	});
     
 }
 
