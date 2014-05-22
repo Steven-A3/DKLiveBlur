@@ -39,7 +39,7 @@
         _backgroundImageView = [[UIImageView alloc] initWithFrame: self.bounds];
         
         _backgroundImageView.alpha = 0.0;
-        _backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+        _backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
         _backgroundImageView.backgroundColor = [UIColor clearColor];
         
         _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
@@ -152,6 +152,9 @@
 			CGFloat blurLevel = 0.0;
 			if (self.scrollView) {
 				blurLevel = (self.scrollView.contentOffset.y + self.scrollView.contentInset.top) / (2 * CGRectGetHeight(self.bounds) / 3);
+				if (blurLevel >= 0.0 || isnan(blurLevel) || isinf(blurLevel)) {
+					blurLevel = 0.0;
+				}
 			}
 			self.backgroundImageView.alpha = blurLevel;
 			self.backgroundImageView.image = blurredImage;
