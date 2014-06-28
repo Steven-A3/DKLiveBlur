@@ -136,8 +136,10 @@
 
 - (void)setOriginalImage:(UIImage *)originalImage {
     _originalImage = originalImage;
-    
-    self.image = originalImage;
+
+	dispatch_async(dispatch_get_main_queue(), ^{
+		self.image = originalImage;
+	});
 
 	if (!_originalImage) return;
 
