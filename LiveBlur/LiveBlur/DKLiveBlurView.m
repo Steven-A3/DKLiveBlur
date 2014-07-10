@@ -137,10 +137,6 @@
 - (void)setOriginalImage:(UIImage *)originalImage {
     _originalImage = originalImage;
 
-	dispatch_async(dispatch_get_main_queue(), ^{
-		self.image = originalImage;
-	});
-
 	if (!_originalImage) return;
 
     dispatch_queue_t queue = dispatch_queue_create("Blur queue", NULL);
@@ -150,19 +146,13 @@
 		UIImage *blurredImage = [self applyBlurOnImage:self.originalImage withRadius:self.initialBlurLevel];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-
-			CGFloat blurLevel = 0.0;
-			if (self.scrollView) {
-				blurLevel = (self.scrollView.contentOffset.y + self.scrollView.contentInset.top) / (2 * CGRectGetHeight(self.bounds) / 3);
-				if (blurLevel >= 0.0 || isnan(blurLevel) || isinf(blurLevel)) {
-					blurLevel = 0.0;
-				}
-			}
-			self.backgroundImageView.alpha = blurLevel;
+			self.image = _originalImage;
 			self.backgroundImageView.image = blurredImage;
+			if (self.scrollView) {
+				[self setBlurLevel:(self.scrollView.contentOffset.y + self.scrollView.contentInset.top) / (2 * CGRectGetHeight(self.bounds) / 3)];
+			}
 		});
 	});
-    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
