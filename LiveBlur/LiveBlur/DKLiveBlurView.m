@@ -137,7 +137,10 @@
 - (void)setOriginalImage:(UIImage *)originalImage {
     _originalImage = originalImage;
 
-	if (!_originalImage) return;
+	if (!_originalImage) {
+		self.image = nil;
+		return;
+	}
 
     dispatch_queue_t queue = dispatch_queue_create("Blur queue", NULL);
     
