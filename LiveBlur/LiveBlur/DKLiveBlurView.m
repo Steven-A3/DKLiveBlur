@@ -163,11 +163,14 @@
 }
 
 - (void)setBlurLevel:(float)blurLevel {
-    self.backgroundImageView.alpha = blurLevel;
-    
-    if (self.isGlassEffectOn) {
-        self.backgroundGlassView.alpha = MAX(0.0, MIN(self.backgroundImageView.alpha - self.initialGlassLevel, self.initialGlassLevel));
-    }
+	if (isnan(blurLevel)) {
+		blurLevel = 0.0;
+	}
+	self.backgroundImageView.alpha = blurLevel;
+
+	if (self.isGlassEffectOn) {
+		self.backgroundGlassView.alpha = MAX(0.0, MIN(self.backgroundImageView.alpha - self.initialGlassLevel, self.initialGlassLevel));
+	}
 }
 
 @end
