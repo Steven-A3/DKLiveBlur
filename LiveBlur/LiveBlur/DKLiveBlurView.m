@@ -139,6 +139,7 @@
 
 	if (!_originalImage) {
 		self.image = nil;
+		self.backgroundImageView = nil;
 		return;
 	}
 
